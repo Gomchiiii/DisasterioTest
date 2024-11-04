@@ -1,3 +1,27 @@
+async function readItemsFromExcel() {
+    const response = await fetch("Items.xlsx");
+    const data = await response.arrayBuffer();
+    const workbook = XLSX.read(data, { type: "array" });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    const items = [];
+    for (let i = 1; i < 90; i++) {
+        const [ korName, name, weight, volume, description] = rows[i];
+        items.push({
+            id: i,
+            korName : korName,
+            name: name,
+            weight: weight || 0, 
+            volume : volume || 0,
+            description: description,
+            imgsource : "resource/${korName}.png"
+        });
+    }
+
+    return items;
+}
+
 class InventorySystem {
     constructor() {
         this.maxWeight = 100;
@@ -187,5 +211,6 @@ class InventorySystem {
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
+    readItemsFromExcel();
     new InventorySystem();
 });
