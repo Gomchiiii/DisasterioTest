@@ -1,5 +1,5 @@
 async function readItemsFromExcel() {
-    const response = await fetch("Items.xlsx");
+    const response = await fetch("items.xlsx");
     const data = await response.arrayBuffer();
     const workbook = XLSX.read(data, { type: "array" });
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
