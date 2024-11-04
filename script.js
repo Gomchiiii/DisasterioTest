@@ -1,25 +1,38 @@
 async function readItemsFromExcel() {
-    const response = await fetch("items.xlsx");
-    const data = await response.arrayBuffer();
-    const workbook = XLSX.read(data, { type: "array" });
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    try {
+        const response = await fetch("Items.xlsx");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: "array" });
+        
+        // 첫 번째 시트 선택
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        
+        // 시트의 데이터를 JSON으로 변환
+        const data = XLSX.utils.sheet_to_json(worksheet);
+        
+        // 데이터 매핑
+        const items = data.map((row, index) => ({
+            id: index + 1,
+            korName: row['korName'] || '',
+            name: row['name'] || '',
+            weight: parseFloat(row['weight']) || 0,
+            volume: parseFloat(row['volume']) || 0,
+            description: row['description'] || '',
+            imgsource: `resource/${row['korName']}.png`
+        }));
 
-    const items = [];
-    for (let i = 1; i < 90; i++) {
-        const [ korName, name, weight, volume, description] = rows[i];
-        items.push({
-            id: i,
-            korName : korName,
-            name: name,
-            weight: weight || 0, 
-            volume : volume || 0,
-            description: description,
-            imgsource : "resource/choco.png"
-        });
+        console.log('Loaded items:', items); // 디버깅용
+        return items;
+        
+    } catch (error) {
+        console.error('Error reading Excel file:', error);
+        // 에러 발생 시 빈 배열 반환하여 시스템이 계속 작동할 수 있도록 함
+        return [];
     }
-
-    return items;
 }
 
 class InventorySystem {
