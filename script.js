@@ -15,7 +15,7 @@ async function readItemsFromExcel() {
             weight: weight || 0, 
             volume : volume || 0,
             description: description,
-            imgsource : "resource/${name}.png"
+            imgsource : "resource/choco.png"
         });
     }
 
