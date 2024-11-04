@@ -11,105 +11,84 @@
     <div class="container">
         <header>
             <div class="team-info">
-                <h1 class="team-name">Team Name</h1>
+                <h1 id="team-name" class="team-name">Team Name</h1>
             </div>
+    
             <div class="timer">
                 <div class="timer-circle">
                     <span id="timer-count">15</span>
                 </div>
             </div>
         </header>
-
+    
         <main>
-            <div class="inventory-section">
+            <section class="inventory-section">
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="아이템 검색...">
                 </div>
-                
+    
                 <div class="categories">
                     <div class="category">
-                        <h3>음식</h3>
                         <div class="items-grid">
-                            <div class="item" draggable="true" data-weight="4" data-volume="2">
-                                <img src="resource/choco.png" alt="초코바">
-                                <span class="item-info">4</span>
-                            </div>
-                            <div class="item" draggable="true" data-weight="1" data-volume="2">
-                                <img src="resource/water.png" alt="물">
-                                <span class="item-info">10</span>
-                            </div>
-                            <!-- 추가 아이템들 -->
+                            <!-- Items will be dynamically populated here -->
                         </div>
                     </div>
-                    <div class="category">
-                        <h3>커피</h3>
-                        <div class="items-grid">
-                            <div class="item" draggable="true" data-weight="4" data-volume="2">
-                                <img src="resource/choco.png" alt="흠">
-                                <span class="item-info">1</span>
-                            </div>
-                            <div class="item" draggable="true" data-weight="1" data-volume="2">
-                                <img src="resource/water.png" alt="엥">
-                                <span class="item-info">1</span>
-                            </div>
-                            <!-- 추가 아이템들 -->
-                        </div>
-                    </div>                    
-                    <!-- 추가 카테고리들 -->
                 </div>
-            </div>
-
-            <div class="bag-section">
+            </section>
+    
+            <section class="bag-section">
                 <div class="bag-info">
                     <div class="capacity-bars">
                         <div class="capacity-bar">
-                            <label>무게</label>
+                            무게
                             <div class="bar-container">
-                                <div class="bar-fill" id="weight-bar"></div>
+                                <div id="weight-bar" class="bar-fill"></div>
                             </div>
                             <span id="weight-info">0/100</span>
                         </div>
+    
                         <div class="capacity-bar">
-                            <label>부피</label>
+                            부피
                             <div class="bar-container">
-                                <div class="bar-fill" id="volume-bar"></div>
+                                <div id="volume-bar" class="bar-fill"></div>
                             </div>
                             <span id="volume-info">0/100</span>
                         </div>
                     </div>
                 </div>
-                <div class="bag-grid" id="bag-container">
-                    <!-- 가방 내 아이템들이 여기에 추가됨 -->
+    
+                <div id="bag-container" class="bag-grid">
+                    <!-- Bag items will be added here -->
                 </div>
-            </div>
+            </section>
         </main>
-
-        <div class="item-modal" id="item-modal">
+    
+        <div id="item-modal" class="item-modal">
             <div class="modal-content">
-                <button class="close-btn" id="modal-close">×</button>
+                <div>×</div>
+    
                 <div class="item-preview">
-                    <img id="modal-item-img" src="" alt="">
+                    <img id="modal-item-img" src="" alt="item">
                     <h3 id="modal-item-name"></h3>
-                    <p id="modal-item-desc"></p>
                 </div>
+    
                 <div class="item-stats">
                     <div class="stat">
-                        <label>무게:</label>
-                        <span id="modal-item-weight"></span>
+                        무게: <span id="modal-item-weight"></span>
                     </div>
                     <div class="stat">
-                        <label>부피:</label>
-                        <span id="modal-item-volume"></span>
+                        부피: <span id="modal-item-volume"></span>
                     </div>
                 </div>
+    
                 <div class="quantity-selector">
-                    <label>수량:</label>
+                    수량:
                     <div class="slider-container">
-                        <input type="range" id="quantity-slider" min="1" max="10" value="1">
                         <span id="quantity-value">1</span>
                     </div>
                 </div>
-                <button class="add-to-bag-btn" id="add-to-bag-btn">가방에 넣기</button>
+    
+                <button class="add-to-bag-btn">가방에 넣기</button>
             </div>
         </div>
     </div>
