@@ -22,7 +22,7 @@ async function readItemsFromExcel() {
             weight: parseFloat(row['weight']) || 0,
             volume: parseFloat(row['volume']) || 0,
             description: row['description'] || '',
-            imgsource: `resource/${row['name']}.png`
+            imgsource: `resource/${row['korName']}.png`
         }));
 
         console.log('Loaded items:', items); // 디버깅용
@@ -51,13 +51,14 @@ class InventorySystem {
         try {
             this.items = await readItemsFromExcel();
             this.initializeElements();
-           //this.populateInventory();
+            this.populateInventory();
             this.initializeEventListeners();
             this.startTimer();
         } catch (error) {
             console.error("Failed to initialize system:", error);
         }
     }
+
     initializeElements() {
         this.bagContainer = document.getElementById('bag-container');
         this.weightBar = document.getElementById('weight-bar');
@@ -74,40 +75,56 @@ class InventorySystem {
         this.modalItemName = document.getElementById('modal-item-name');
         this.modalItemWeight = document.getElementById('modal-item-weight');
         this.modalItemVolume = document.getElementById('modal-item-volume');
-        this.modalItemDescription = document.getElementById('modal-item-description');
-        
-        // 수량 선택 슬라이더 요소 추가
-        const sliderContainer = document.querySelector('.slider-container');
         this.quantityValue = document.getElementById('quantity-value');
-        
-        // 슬라이더 생성
-        this.quantitySlider = document.createElement('input');
-        this.quantitySlider.type = 'range';
-        this.quantitySlider.min = '0';
-        this.quantitySlider.max = '10';
-        this.quantitySlider.value = '1';
-        this.quantitySlider.step = '1';
-        this.quantitySlider.style.width = '100%';
-        sliderContainer.insertBefore(this.quantitySlider, this.quantityValue);
-        
         this.addToBagBtn = document.querySelector('.modal-content button:last-child');
     }
 
+    populateInventory() {
+        const itemsGrid = document.querySelector('.items-grid');
+        itemsGrid.innerHTML = ''; // 기존 아이템 비우기
+
+        this.items.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'item';
+            itemElement.draggable = true;
+            itemElement.dataset.id = item.id;
+            itemElement.dataset.korName = item.korName;
+            itemElement.dataset.name = item.name;
+            itemElement.dataset.weight = item.weight;
+            itemElement.dataset.volume = item.volume;
+            itemElement.dataset.description = item.description;
+
+            const img = document.createElement('img');
+            img.src = item.imgsource;
+            img.alt = item.korName;
+
+            const itemInfo = document.createElement('span');
+            itemInfo.className = 'item-info';
+            itemInfo.textContent = item.weight;
+
+            itemElement.appendChild(img);
+            itemElement.appendChild(itemInfo);
+            itemsGrid.appendChild(itemElement);
+        });
+    }
+
     initializeEventListeners() {
-        // 기존 이벤트 리스너들
+        // 아이템 클릭 이벤트
         document.querySelectorAll('.item').forEach(item => {
             item.addEventListener('click', (e) => this.openItemModal(e.currentTarget));
         });
 
+        // 검색 기능
         this.searchInput.addEventListener('input', this.handleSearch.bind(this));
+
+        // 모달 관련 이벤트
         this.modalClose.addEventListener('click', () => this.closeItemModal());
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.closeItemModal();
         });
 
-        // 슬라이더 이벤트 리스너 추가
-        this.quantitySlider.addEventListener('input', () => {
-            this.quantityValue.textContent = this.quantitySlider.value;
+        // 수량 입력에 대한 이벤트
+        this.quantityValue.addEventListener('input', () => {
             this.updateModalStats();
         });
 
@@ -129,18 +146,31 @@ class InventorySystem {
         this.modalItemName.textContent = item.korName;
         this.modalItemWeight.textContent = `${item.weight}kg`;
         this.modalItemVolume.textContent = `${item.volume}㎥`;
-        this.modalItemDescription.textContent = item.description;
-        
-        // 슬라이더와 수량 값 초기화
-        this.quantitySlider.value = '1';
         this.quantityValue.textContent = '1';
-        this.updateModalStats();
         
         this.modal.style.display = 'block';
     }
 
+    handleSearch(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.item').forEach(item => {
+            const itemKorName = item.dataset.korName.toLowerCase();
+            if (itemKorName.includes(searchTerm)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // 나머지 메서드들은 기존과 동일하게 유지
+    closeItemModal() {
+        this.modal.style.display = 'none';
+        this.selectedItem = null;
+    }
+
     updateModalStats() {
-        const quantity = parseInt(this.quantitySlider.value) || 0;
+        const quantity = parseInt(this.quantityValue.textContent) || 1;
         const totalWeight = (this.selectedItem.weight * quantity).toFixed(1);
         const totalVolume = (this.selectedItem.volume * quantity).toFixed(1);
         
@@ -150,8 +180,7 @@ class InventorySystem {
         const projectedWeight = this.currentWeight + (this.selectedItem.weight * quantity);
         const projectedVolume = this.currentVolume + (this.selectedItem.volume * quantity);
         
-        // 수량이 0이거나 용량을 초과할 경우 버튼 비활성화
-        if (quantity === 0 || projectedWeight > this.maxWeight || projectedVolume > this.maxVolume) {
+        if (projectedWeight > this.maxWeight || projectedVolume > this.maxVolume) {
             this.addToBagBtn.disabled = true;
             this.addToBagBtn.style.backgroundColor = '#666';
         } else {
@@ -161,7 +190,7 @@ class InventorySystem {
     }
 
     addItemToBag() {
-        const quantity = parseInt(this.quantitySlider.value);
+        const quantity = parseInt(this.quantityValue.textContent) || 1;
         const totalWeight = this.selectedItem.weight * quantity;
         const totalVolume = this.selectedItem.volume * quantity;
 
@@ -194,9 +223,45 @@ class InventorySystem {
         this.updateCapacity(totalWeight, totalVolume);
         this.closeItemModal();
     }
-}
 
-// 초기화
+    removeItem(item, weight, volume) {
+        this.bagContainer.removeChild(item);
+        this.updateCapacity(-weight, -volume);
+    }
+
+    updateCapacity(weight, volume) {
+        const weightNum = parseFloat(weight) || 0;
+        const volumeNum = parseFloat(volume) || 0;
+
+        this.currentWeight = Math.max(0, this.currentWeight + weightNum);
+        this.currentVolume = Math.max(0, this.currentVolume + volumeNum);
+
+        const weightPercentage = Math.min(100, ((this.currentWeight / this.maxWeight) * 100)).toFixed(2);
+        const volumePercentage = Math.min(100, ((this.currentVolume / this.maxVolume) * 100)).toFixed(2);
+
+        this.weightBar.style.width = `${weightPercentage}%`;
+        this.volumeBar.style.width = `${volumePercentage}%`;
+
+        this.weightInfo.textContent = `${this.currentWeight.toFixed(1)}/${this.maxWeight}`;
+        this.volumeInfo.textContent = `${this.currentVolume.toFixed(1)}/${this.maxVolume}`;
+    }
+
+    startTimer() {
+        const timerInterval = setInterval(() => {
+            this.timeLeft--;
+            this.timerElement.textContent = this.timeLeft;
+            
+            if (this.timeLeft <= 0) {
+                clearInterval(timerInterval);
+                this.endGame();
+            }
+        }, 1000);
+    }
+
+    endGame() {
+        alert('시간이 종료되었습니다!');
+    }
+}
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
