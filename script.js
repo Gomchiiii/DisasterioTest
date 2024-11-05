@@ -22,7 +22,7 @@ async function readItemsFromExcel() {
             weight: parseFloat(row['weight']) || 0,
             volume: parseFloat(row['volume']) || 0,
             description: row['description'] || '',
-            imgsource: `resource/${row['korName']}.png`
+            imgsource: `resource/${row['name']}.png`
         }));
 
         console.log('Loaded items:', items); // 디버깅용
