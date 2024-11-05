@@ -51,7 +51,7 @@ class InventorySystem {
         try {
             this.items = await readItemsFromExcel();
             this.initializeElements();
-            this.populateInventory();
+           //this.populateInventory();
             this.initializeEventListeners();
             this.startTimer();
         } catch (error) {
