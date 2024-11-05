@@ -47,6 +47,27 @@ class InventorySystem {
         this.initializeSystem();
     }
 
+    async initializeSystem() {
+        try {
+            // 엑셀에서 아이템 데이터 로드
+            this.items = await readItemsFromExcel();
+            
+            // DOM 요소 초기화
+            this.initializeElements();
+            
+            // 인벤토리에 아이템 표시
+            this.populateInventory();
+            
+            // 이벤트 리스너 설정
+            this.initializeEventListeners();
+            
+            // 타이머 시작
+            this.startTimer();
+        } catch (error) {
+            console.error("Failed to initialize system:", error);
+        }
+    }
+
     initializeElements() {
         this.bagContainer = document.getElementById('bag-container');
         this.weightBar = document.getElementById('weight-bar');
