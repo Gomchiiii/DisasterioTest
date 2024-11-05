@@ -190,34 +190,38 @@ class InventorySystem {
     }
 
     addItemToBag() {
-        const quantity = parseInt(this.quantitySlider.value) || 1;
+        const quantity = parseInt(this.quantityValue.textContent) || 1;
         const totalWeight = this.selectedItem.weight * quantity;
         const totalVolume = this.selectedItem.volume * quantity;
-    
+
         if (this.currentWeight + totalWeight > this.maxWeight ||
             this.currentVolume + totalVolume > this.maxVolume) {
             alert('가방의 용량이나 무게 제한을 초과합니다!');
             return;
         }
-    
+
         for (let i = 0; i < quantity; i++) {
-            const newItem = this.selectedItem.element.cloneNode(true);
-            newItem.classList.add('in-bag');
-            
-            // Capture the weight and volume at the time of creation
+            const newItem = document.createElement('div');
+            newItem.className = 'item in-bag';
+            newItem.dataset.weight = this.selectedItem.weight;
+            newItem.dataset.volume = this.selectedItem.volume;
             const itemWeight = this.selectedItem.weight;
             const itemVolume = this.selectedItem.volume;
-    
-            // Add delete button
+            
+            const img = document.createElement('img');
+            img.src = this.selectedItem.imgsource;
+            img.alt = this.selectedItem.korName;
+            
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-item';
             deleteBtn.innerHTML = '×';
-            deleteBtn.onclick = () => this.removeItem(newItem, itemWeight, itemVolume); // Use captured values
-            newItem.appendChild(deleteBtn);
+            deleteBtn.onclick = () => this.removeItem(newItem, itemWeight, itemVolume);
             
+            newItem.appendChild(img);
+            newItem.appendChild(deleteBtn);
             this.bagContainer.appendChild(newItem);
         }
-    
+
         this.updateCapacity(totalWeight, totalVolume);
         this.closeItemModal();
     }
