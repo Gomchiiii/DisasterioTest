@@ -75,6 +75,7 @@ class InventorySystem {
         this.modalItemName = document.getElementById('modal-item-name');
         this.modalItemWeight = document.getElementById('modal-item-weight');
         this.modalItemVolume = document.getElementById('modal-item-volume');
+        this.modalItemDescription = document.getElementById('modal-item-description')
         this.quantityValue = document.getElementById('quantity-value');
         this.quantitySlider = document.getElementById('quantity-slider');
         this.addToBagBtn = document.querySelector('.modal-content button:last-child');
@@ -147,6 +148,7 @@ class InventorySystem {
         this.modalItemName.textContent = item.korName;
         this.modalItemWeight.textContent = `${item.weight}kg`;
         this.modalItemVolume.textContent = `${item.volume}㎥`;
+        this.modalItemDescription.textContent = item.description
         this.quantitySlider.value = '1';
         this.quantityValue.textContent = 1;
         

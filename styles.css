@@ -267,11 +267,25 @@ main {
     margin-bottom: 20px;
 }
 
-.stat {
+.item-stats .stat td:first-child {
+    min-width: 80px; /* Adjust this value as needed */
+    white-space: nowrap; /* Prevent wrapping to keep text in a single line */
+    padding-right: 10px; /* Add padding to create space between columns */
+}
+
+.item-stats .stat td {
+    padding: 5px;
+    vertical-align: top; /* Align text to the top for a more uniform look */
+}
+
+.item-stats .stat td:last-child {
+    word-wrap: break-word; /* Enable word wrapping for lengthy text in the second column */
+}
+/* .stat {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-}
+} */
 
 .quantity-selector {
     margin-bottom: 20px;
