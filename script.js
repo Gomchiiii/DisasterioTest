@@ -76,6 +76,7 @@ class InventorySystem {
         this.modalItemWeight = document.getElementById('modal-item-weight');
         this.modalItemVolume = document.getElementById('modal-item-volume');
         this.quantityValue = document.getElementById('quantity-value');
+        this.quantitySlider = document.getElementById('quantity-slider');
         this.addToBagBtn = document.querySelector('.modal-content button:last-child');
     }
 
@@ -123,8 +124,8 @@ class InventorySystem {
             if (e.target === this.modal) this.closeItemModal();
         });
 
-        // 수량 입력에 대한 이벤트
-        this.quantityValue.addEventListener('input', () => {
+        this.quantitySlider.addEventListener('input', () => {
+            this.quantityValue.textContent = this.quantitySlider.value;
             this.updateModalStats();
         });
 
@@ -146,7 +147,8 @@ class InventorySystem {
         this.modalItemName.textContent = item.korName;
         this.modalItemWeight.textContent = `${item.weight}kg`;
         this.modalItemVolume.textContent = `${item.volume}㎥`;
-        this.quantityValue.textContent = '1';
+        this.quantitySlider.value = '1';
+        this.quantityValue.textContent = 1;
         
         this.modal.style.display = 'block';
     }
