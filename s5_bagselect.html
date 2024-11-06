@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survival Bag Selection</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,41 +18,6 @@
             gap: 20px;
             padding-top: 20px;
         }
-        .bag-option {
-            width: 200px;
-            background-color: #f2f2f2;
-            border: 2px solid transparent;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: black;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-        .bag-option.selected {
-            border-color: #ff9900;
-        }
-        .bag-option img {
-            width: 100px;
-            height: auto;
-        }
-        .bag-details {
-            margin-top: 10px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .button-container {
-            margin-top: 20px;
-        }
-        .select-button {
-            background-color: #ff9900;
-            color: black;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -60,13 +26,13 @@
         <p>Room : 882910</p>
         <h1>Disaster.io</h1>
         <h2>생존 물품을 담을 가방을 선택해 주세요.</h2>
-        <p>YOU : 꿈들이와님죽이</p>
+        <p>YOU : 꿈돌이와넙죽이</p>
     </div>
 
     <div class="container">
-        <div class="bag-option selected" onclick="selectBag(this)">
+        <div class="s5-bags-option selected" onclick="selectBag(this)">
             <img src="backpack1.png" alt="Military Backpack">
-            <div class="bag-details">
+            <div class="s5-bag-detail">
                 <p>무게 한도 : 30kg</p>
                 <p>부피 한도 : 30L</p>
                 <p>가방 무게 : 5kg</p>
@@ -74,9 +40,9 @@
             </div>
         </div>
         
-        <div class="bag-option" onclick="selectBag(this)">
+        <div class="s5-bags-option" onclick="selectBag(this)">
             <img src="backpack2.png" alt="Cute Backpack">
-            <div class="bag-details">
+            <div class="s5-bag-detail">
                 <p>무게 한도 : 15kg</p>
                 <p>부피 한도 : 15L</p>
                 <p>가방 무게 : 1kg</p>
@@ -84,9 +50,9 @@
             </div>
         </div>
         
-        <div class="bag-option" onclick="selectBag(this)">
+        <div class="s5-bags-option" onclick="selectBag(this)">
             <img src="backpack3.png" alt="Eco Tote Bag">
-            <div class="bag-details">
+            <div class="s5-bag-detail">
                 <p>무게 한도 : 10kg</p>
                 <p>부피 한도 : 15L</p>
                 <p>가방 무게 : 0.5kg</p>
@@ -102,7 +68,7 @@
     <script>
         function selectBag(selectedElement) {
             // Remove "selected" class from all bag options
-            document.querySelectorAll('.bag-option').forEach(option => {
+            document.querySelectorAll('.s5-bags-option').forEach(option => {
                 option.classList.remove('selected');
             });
             

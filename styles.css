@@ -370,3 +370,39 @@ main {
 .item {
     position: relative;
 }
+
+.s5-bags-option {
+    width: 200px;
+    background-color: #f2f2f2;
+    border: 2px solid transparent;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+.s5-bags-option.selected {
+    border-color: #ff9900;
+}
+.s5-bags-option img {
+    width: 100px;
+    height: auto;
+}
+.s5-bag-detail {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.button-container {
+    margin-top: 20px;
+}
+.select-button {
+    background-color: #ff9900;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
