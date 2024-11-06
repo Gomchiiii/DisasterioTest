@@ -267,6 +267,7 @@ class InventorySystem {
 
     endGame() {
         alert('시간이 종료되었습니다!');
+        window.location.href = 's7_sceneinfo.html';
     }
 }
 
