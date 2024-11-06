@@ -262,6 +262,7 @@ class InventorySystem {
                 this.endGame();
             }
         }, 1000);
+        this.timerElement.addEventListener('click', () => this.endGame());
     }
 
     endGame() {
